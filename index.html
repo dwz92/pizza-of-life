@@ -54,19 +54,46 @@
     // const sectors = [];
 
     const sliceAngles = [
-        360-360, 360-356.82819383259914, 360-305.2863436123348, 360-277.5330396475771, 360-198.23788546255506,
-        360-166.51982378854626, 360-42.02643171806167, 360-37.66519823788546, 360-32.669603524229075,
-        360-18.237885462555067, 360-5.233480176211454, 360-0.023788546255506606, 360-0.0004044052863436124, 360-0.0002458149779735683, 
-        360-4.202643171806168e-05
+        // 60, 66.52173913, 108.9130435, 131.7391304, 196.9565217,
+        // 223.0434783, 258.2608696, 325.4347826, 329.0217391,
+        // 333.1304348, 345, 355.6956522, 
+        // 359.9804348, 359.999237, 359.9996674, 359.999863, 360
+        0,
+        7.826086957,
+        58.69565217,
+        86.08695652,
+        164.3478261,
+        195.6521739,
+        237.9130435,
+        318.5217391,
+        322.826087,
+        327.7565217,
+        342,
+        354.8347826,
+        359.9765217,
+        359.9990843,
+        359.9996009,
+        359.9998357,
+        360,
     ];
 
     const sliceInfo = [
-        "Formation of Earth ~4.6 Ga and the Final piece of Modern Day", "Formation of Moon ~4.5 Ga", "First carbon isotopic evidence of life ~3.85 Ga", 
-        "Earliest microfossil evidence of life ~3.5 Ga", "Great Oxidation Event ~ 2.5 Ga",
-        "Earliest eukaryotic fossil ~2.1 Ga & First multicellular organisms ~2.1 Ga",
-        "Cambrian Explosion ~ 0.53 Ga", "Plant and Fungi Colonize Land ~0.475 Ga", "Animal Colonize Land ~ 0.412 Ga", 
-        "Mammals and Dinosaurs ~ 0.23 Ga", "Dinosaur Extinction ~0.066 Ga", "Homo sapiens ~0.0003 Ga",
-        "Ancient Egyptian Civilization ~6.1e-0.6 Ga", "Ancient Dynastic China ~3.1e^06 Ga", "Globalization ~5.3e-07"
+        "Formation of Earth ~4.6 Ga", 
+        "Formation of Moon ~4.5 Ga", 
+        "First carbon isotopic evidence of life ~3.85 Ga", 
+        "Earliest microfossil evidence of life ~3.5 Ga", 
+        "Great Oxidation Event ~ 2.5 Ga",
+        "Earliest eukaryotic fossil ~2.1 Ga",
+        "First multicellular organisms ~1.56 Ga",
+        "Cambrian Explosion ~ 0.53 Ga", 
+        "Plant and Fungi Colonize Land ~0.475 Ga", 
+        "Animal Colonize Land ~ 0.412 Ga", 
+        "Mammals and Dinosaurs ~ 0.23 Ga", 
+        "Dinosaur Extinction ~0.066 Ga", 
+        "Homo sapiens ~0.0003 Ga",
+        "End of Ice Age ~1.17e-05", 
+        "Ancient Egyptian Civilization ~5.1e-06 Ga", "Silk Road ~2.1e-06",
+        "Modern Day ~Present"
     ];
 
     for (let i = 0; i < numParticles; i++) {
@@ -78,11 +105,16 @@
         particles.push({ radius, angle, speed, size, colorHue });
     }
 
-    function drawRadialLines() {
-        let currentAngle = 0;
+    const sliceRanges = [];
+    let last = 0;
+    for (let angle of sliceAngles) {
+        sliceRanges.push([last, angle]);
+        last = angle;
+    }
 
-        for (let angle of sliceAngles) {
-            const theta = (currentAngle * Math.PI) / 180;
+    function drawRadialLines() {
+        for (let [angleDeg] of sliceRanges) {
+            const theta = (angleDeg * Math.PI) / 180;
             const x = cx + maxRadius * Math.cos(theta);
             const y = cy + maxRadius * Math.sin(theta);
 
@@ -90,10 +122,8 @@
             ctx.moveTo(cx, cy);
             ctx.lineTo(x, y);
             ctx.strokeStyle = "rgba(0, 0, 0)";
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 3;
             ctx.stroke();
-
-            currentAngle += angle;
         }
     }
 
@@ -123,26 +153,6 @@
         }
     }
 
-    function drawSectors() {
-        for (let i = 0; i < sliceAngles.length; i++) {
-            const angleDeg = sliceAngles[i];
-            const startRad = (currentAngle * Math.PI) / 180;
-            const endRad = ((currentAngle + angleDeg) * Math.PI) / 180;
-
-            // Draw the arc sector
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.arc(cx, cy, r, startRad, endRad);
-            ctx.closePath();
-
-            ctx.fillStyle = `rgba(255, 255, 255, 0.1)`;
-            ctx.fill();
-
-            sectors.push({ start: startRad, end: endRad, label: sliceInfo[i] });
-            currentAngle += angleDeg;
-        }
-    }
-
     function animate() {
         ctx.clearRect(0, 0, w, h);
         drawGradientBackground();
@@ -151,79 +161,45 @@
         requestAnimationFrame(animate);
     }
 
-    // drawSectors();
-    animate();
+    canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / (rect.right - rect.left) * canvas.width / scale;
+        const y = (e.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height / scale;
 
-    const tooltip = document.getElementById("tooltip");
-    const overlays = document.getElementById("sliceOverlays");
+        const dx = x - cx;
+        const dy = y - cy;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > maxRadius) {
+            tooltip.style.display = "none";
+            return;
+        }
 
-    // const tooltip = document.getElementById("tooltip");
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        if (angle < 0) angle += 360;
 
-    // canvas.addEventListener("mousemove", (e) => {
-    // const rect = canvas.getBoundingClientRect();
-    // const x = (e.clientX - rect.left) / (rect.width / 500);
-    // const y = (e.clientY - rect.top) / (rect.height / 500);
+        let index = -1;
+        for (let i = 0; i < sliceRanges.length - 1; i++) {
+            if (angle >= sliceRanges[i][0] && angle < sliceRanges[i + 1][0]) {
+                index = i;
+                break;
+            }
+        }
 
-    // const dx = x - cx;
-    // const dy = y - cy;
-    // const dist = Math.sqrt(dx * dx + dy * dy);
-    // const angle = Math.atan2(dy, dx);
-    // const normAngle = (angle < 0) ? angle + 2 * Math.PI : angle;
-
-    // if (dist > r) {
-    //     tooltip.style.display = "none";
-    //     return;
-    // }
-
-    // const hovered = sectors.find(sec => normAngle >= sec.start && normAngle < sec.end);
-    // if (hovered) {
-    //     tooltip.style.display = "block";
-    //     tooltip.style.left = `${e.pageX + 10}px`;
-    //     tooltip.style.top = `${e.pageY + 10}px`;
-    //     tooltip.innerHTML = `<strong>${hovered.label}</strong>`;
-    // } else {
-    //     tooltip.style.display = "none";
-    // }
-    // });
-
-    let currentAngle = 0;
-
-    sliceAngles.forEach((angleSize, i) => {
-    const start = currentAngle;
-    const end = currentAngle + angleSize;
-
-    const r1 = start * Math.PI / 180;
-    const r2 = end * Math.PI / 180;
-
-    const x1 = 50 + 50 * Math.cos(r1); // %
-    const y1 = 50 + 50 * Math.sin(r1); // %
-    const x2 = 50 + 50 * Math.cos(r2); // %
-    const y2 = 50 + 50 * Math.sin(r2); // %
-
-    const slice = document.createElement("div"); // Moved INSIDE
-    slice.className = "slice-region";
-    slice.style.position = "absolute";
-    slice.style.top = "0";
-    slice.style.left = "0";
-    slice.style.width = "100%";
-    slice.style.height = "100%";
-    slice.style.clipPath = `polygon(50% 50%, ${x1}% ${y1}%, ${x2}% ${y2}%)`;
-    slice.style.background = "rgba(255,255,255,0)"; // Make it hoverable
-
-    slice.addEventListener("mousemove", (e) => {
-        tooltip.style.left = `${e.pageX + 10}px`;
-        tooltip.style.top = `${e.pageY + 10}px`;
-        tooltip.style.display = "block";
-        tooltip.innerHTML = `<strong>${sliceInfo[i]}</strong>`;
+        if (index >= 0 && sliceInfo[index]) {
+            tooltip.innerText = sliceInfo[index];
+            tooltip.style.display = "block";
+            tooltip.style.left = `${e.clientX + 10}px`;
+            tooltip.style.top = `${e.clientY + 10}px`;
+        } else {
+            tooltip.style.display = "none";
+        }
     });
 
-    slice.addEventListener("mouseleave", () => {
+    canvas.addEventListener("mouseleave", () => {
         tooltip.style.display = "none";
     });
 
-    overlays.appendChild(slice); // Moved INSIDE
-    currentAngle += angleSize;
-    });
+    animate();
 
   </script>
 </body>
