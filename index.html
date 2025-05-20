@@ -14,6 +14,7 @@
       <div class="stars2"></div>
     </div>
 
+
     <div class="pizza-box">
         <div class="pizza" id="pizza">
             <!-- <img src="slices/slice1.png" class="slice" style="--rotate: 0deg" />
@@ -22,6 +23,41 @@
             <div class="slice-overlays" id="sliceOverlays"></div>
             <!-- <div class="tooltip" id="tooltip"></div> -->
         </div>
+    </div>
+
+    <div class="formation-box">
+        <h1> The Formation of Earth ~4.6 Ga</h1>
+        <h3> The very terrestrial planet that we live on <br>
+             was formed around 4.6 billion years ago from <br> 
+             the swirling gas and dust pulled together by gravity. <br> <br>
+             Since then, life began to prosper on this rocky planet, <br>
+             and each leaving their unique marks on this ancient stone. <br>
+
+             <br><br><br><br><br><br>
+
+             If we use a pizza as 
+
+        </h3>
+        
+    </div>
+
+    <div class="human-time">
+        <h1> ---Final cuts by us</h1>
+        <h3>
+            <b>You might have noticed that the slice cut near</b><br>
+            <b>the horizontal appears thicker than the rest.</b><br><br>
+            This is not a mistake in width, <br>
+            but a deliberate visualization of human civilization's <br>
+            insignificance in the vast timeline of Earth's history. <br>
+            From Homo sapiens to the modern day, <br>
+            the entire span of human civilization occupies<br>
+            a sliver of time no wider than a crumb on this <br> planetary pizza.<br>
+            <br>
+            However, the insignificance of humanity in Earth's age <br>
+            is not an insignificance in Earth's life system. <br>
+            It is inarguable that humanity have left indelible marks <br>
+            on the rocky planet that they inhabit.
+        </h3>
     </div>
     
     <div class="tooltip" id="tooltip"></div>
@@ -58,7 +94,6 @@
         // 223.0434783, 258.2608696, 325.4347826, 329.0217391,
         // 333.1304348, 345, 355.6956522, 
         // 359.9804348, 359.999237, 359.9996674, 359.999863, 360
-        0,
         7.826086957,
         58.69565217,
         86.08695652,
@@ -78,7 +113,6 @@
     ];
 
     const sliceInfo = [
-        "Formation of Earth ~4.6 Ga", 
         "Formation of Moon ~4.5 Ga", 
         "First carbon isotopic evidence of life ~3.85 Ga", 
         "Earliest microfossil evidence of life ~3.5 Ga", 
@@ -90,10 +124,11 @@
         "Animal Colonize Land ~ 0.412 Ga", 
         "Mammals and Dinosaurs ~ 0.23 Ga", 
         "Dinosaur Extinction ~0.066 Ga", 
-        "Homo sapiens ~0.0003 Ga",
-        "End of Ice Age ~1.17e-05", 
-        "Ancient Egyptian Civilization ~5.1e-06 Ga", "Silk Road ~2.1e-06",
-        "Modern Day ~Present"
+        "Homo sapiens ~0.0003 Ga \n End of Ice Age ~1.17e-05 Ga \n Ancient Egyptian Civilization ~5.1e-06 Ga \n Silk Road ~2.1e-06 Ga \n Modern Day ~Present",
+        "Place holder", 
+        "Place holder", 
+        "Place holder",
+        "Place holder"
     ];
 
     for (let i = 0; i < numParticles; i++) {
@@ -121,7 +156,12 @@
             ctx.beginPath();
             ctx.moveTo(cx, cy);
             ctx.lineTo(x, y);
-            ctx.strokeStyle = "rgba(0, 0, 0)";
+
+            // if (angleDeg >= 359) {
+            //     ctx.strokeStyle = "rgba(255, 255, 255)";
+            // } else {
+                ctx.strokeStyle = "rgba(0, 0, 0)";
+            // }
             ctx.lineWidth = 3;
             ctx.stroke();
         }

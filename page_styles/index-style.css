@@ -103,23 +103,6 @@ html body {
   overflow: visible;
 }
 
-/* .slice {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 50%;
-  transform-origin: bottom center;
-  transform: rotate(var(--rotate)) translateY(-50%);
-  transition: transform 0.3s ease;
-  z-index: 2;
-  pointer-events: all;
-}
-
-.slice:hover {
-  transform: rotate(var(--rotate)) translateY(-50%) scale(1.1);
-  z-index: 3;
-} */
-
 .slice-overlays {
   position: absolute;
   width: 700px;
@@ -157,4 +140,35 @@ html body {
   pointer-events: none;
   display: none;
   z-index: 9999;
+  max-width: 300px;    
+  white-space: normal;   
+  word-wrap: break-word;
+}
+
+
+/* Text */
+.formation-box{
+  position: absolute;
+  top: 10%;
+  left: 3%;
+  margin: auto;
+
+}
+
+html h1{
+  color: white;
+  font-family: 'Courier New';
+}
+
+
+html h3{
+  color: white;
+  font-family: 'Courier New';
+}
+
+.human-time{
+  position: absolute;
+  top: 40%;
+  right: 5%;
+  margin: auto;
 }
