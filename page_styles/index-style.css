@@ -143,6 +143,7 @@ html body {
   max-width: 300px;    
   white-space: normal;   
   word-wrap: break-word;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 
